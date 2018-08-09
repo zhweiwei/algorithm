@@ -13,14 +13,14 @@ int maxSum(const vector<int> & a,int left,int right){
   int rightMax = maxSum(a,center+1,right);
 
   int borderleft = 0,maxBorderleft = 0;
-  for(int i= center;i > left;i--){
+  for(int i= center;i >= left;i--){
     borderleft +=a[i];
     if(borderleft > maxBorderleft)
       maxBorderleft = borderleft;
   }
 
   int borderright = 0,maxBorderright = 0;
-  for(int i =right;i > center+1;i--){
+for(int i =center+1;i <= right;i++){
     borderright += a[i];
   if(borderright > maxBorderright)
     maxBorderright = borderright;
@@ -35,13 +35,14 @@ int max3(int a,int b,int c){
 }
 
 int maxsub(const vector<int> &a){
-  return maxSum(a,0,a.size());
+  return maxSum(a,0,a.size()-1);
 }
 
 int main(){
   int i;
-  vector<int> a;
-  while(cin >> i)a.push_back(i);
+ int v[] = {12,2,-23,4,3,-34,54,65,23,-23,-45,4,56,-34,-65};
+  vector<int> a(v,v+15);
+
   int max = maxsub(a);
   vector<int>::iterator p = a.begin();
   while(p != a.end()) cout << *p++ <<" " ;
