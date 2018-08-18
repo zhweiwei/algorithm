@@ -2,6 +2,7 @@
 #define AVLNODE_H 1
 #include <iostream>
 #include <string>
+#include <deque>
 
 using namespace std;
 
@@ -21,7 +22,8 @@ public:
   void makeEmpty();
   void insert(const Comparable& x);
   void remove(const Comparable& x);
-
+  void printlevel()const;
+  void printLeftTree()const;
   //const AvlTree& operator=(const AvlTree& rhs);
 
   struct AvlNode{
@@ -45,6 +47,8 @@ public:
   void doubleWithRightChild(AvlNode * & k);
   void makeEmpty(AvlNode * & k);
   void printNode(AvlNode* const& k)const;
+  void printlevel(AvlNode* const& k)const;
+  void printLeftNode(AvlNode* const&)const;
 };
 #endif
 
@@ -56,7 +60,7 @@ template<class Comparable>
 template<class Comparable>
  void AvlTree<Comparable>::insert(const Comparable& x,AvlNode* & t){
   if(t == NULL)
-    t = new AvlNode(x,NULL,NULL);
+    t = new AvlNode(x,NULL,NULL,0);
  else if(x < t->element){
     insert(x,t->left);
   if(height(t->left) - height(t->right) == 2)
@@ -72,6 +76,7 @@ template<class Comparable>
     else
       doubleWithRightChild(t);
   }else
+;
     t->height = max(height(t->left),height(t->right)) +1;
 }
 
@@ -130,10 +135,24 @@ void AvlTree<Comparable>::makeEmpty(){
 template<class Comparable>
 void AvlTree<Comparable>::printNode(AvlNode* const & k)const{
   if(k != NULL){
-    cout << k->element << " ";
+    cout << k->element << " ("<< k->height<<") ";
     printNode(k->left);
     printNode(k->right);
   }
+}
+
+template<class Comparable>
+void AvlTree<Comparable>::printLeftNode(AvlNode* const & k)const{
+  if(k != NULL){
+    printLeftNode(k->left);
+    cout << k->element << " ";
+    printLeftNode(k->right);
+  }
+}
+
+template<class Comparable>
+void AvlTree<Comparable>::printLeftTree()const{
+  printLeftNode(root);
 }
 
 template<class Comparable>
@@ -155,6 +174,27 @@ template<class Comparable>
 bool AvlTree<Comparable>::isEmpty()const{
   return root == NULL?true:false;
 }
+
+template<class Comparable>
+void AvlTree<Comparable>::printlevel()const{
+  printlevel(root);
+}
+
+template<class Comparable>
+void AvlTree<Comparable>::printlevel(AvlNode* const& t)const{
+  if(root == NULL)return;
+  deque<AvlNode*> q;
+  q.push_back(root);
+  cout <<endl;
+  while(!q.empty()){
+    AvlNode* temp = q.front();
+    q.pop_front();
+    cout << temp->element<< " ";
+    if(temp->left != NULL)q.push_back(temp->left);
+    if(temp->right != NULL)q.push_back(temp->right);
+  }
+  cout << endl;
+} 
 
 /*
 AvlTree(const AvlTree& rhs){
